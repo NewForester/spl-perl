@@ -36,6 +36,7 @@ All modules have been put through [Perl::Lint](https://www.perllint.org/) with d
 
 Module  | Contents
 ------  | --------
+hello   | a simple routine inspired by the K&R Hello World program
 
 ---
 
