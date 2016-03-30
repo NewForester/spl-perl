@@ -5,7 +5,7 @@ use warnings;
 
 =head1 NAME
 
-TestFibonacci - unit test for fibonacci.pm
+TestFibonacci - unit test for the Fibonacci package
 
 =head1 SYNOPSIS
 
@@ -18,23 +18,27 @@ the first 10 terms of the Fibonacci series.
 
 By induction, the function works for all other positive integers.
 
+The test is run for two implementations of fibonacci():
+ - exponential complexity (dumb implementation)
+ - linear complexity (inspired by functional programming)
+
 =head1 EXAMPLES
 
     $ perl TestFibonacci.pm
 
 will print
 
-    1..10
+    1..20
+
+    Test exponential fibonacci algorithm ...
     ok 1 - 1st Fibonacci number
-    ok 2 - 2nd Fibonacci number
-    ok 3 - 3rd Fibonacci number
-    ok 4 - 4th Fibonacci number
-    ok 5 - 5th Fibonacci number
-    ok 6 - 6th Fibonacci number
-    ok 7 - 7th Fibonacci number
-    ok 8 - 8th Fibonacci number
-    ok 9 - 9th Fibonacci number
+               ...
     ok 10 - 10th Fibonacci number
+
+    Test linear fibonacci algorithm ...
+    ok 11 - 1st Fibonacci number
+               ...
+    ok 20 - 10th Fibonacci number
 
 demonstrating all tests passed.
 
@@ -50,7 +54,8 @@ demonstrating all tests passed.
 use Test::More;
 use base 'Test::Class';
 
-use fibonacci;
+use fib_exponential;
+use fib_linear;
 
 =head2 make_fixture
 
@@ -80,16 +85,43 @@ sub teardown : Tests(teardown)
     return;
 }
 
-=head2 test_fibonacci
+=head2 test_exponential_fibonacci
 
-    The test case for fibonacci() in fibonacci.pm.
-
-    Verifies the function for the first 10 terms of the Fibonacci series.
+    The test case for fibonacci() in fib_exponential.pm.
 =cut
 
-sub test_fibonacci : Tests(10)
+sub test_exponential_fibonacci : Tests(10)
 {
-    # print "test fibonacci()\n";
+    run_test ('exponential fibonacci algorithm', \&Fibonacci::exponential);
+
+    return;
+}
+
+=head2 test_linear_fibonacci
+
+    The test case for fibonacci() in fib_linear.pm.
+=cut
+
+sub test_linear_fibonacci : Tests(10)
+{
+    run_test ('linear fibonacci algorithm', \&Fibonacci::linear);
+
+    return;
+}
+
+=head2 run_test
+
+    Run a simple test of an implementation of the Fibonacci series.
+
+    Verifies the function under test returns the correct result for the first 10 terms of the series.
+=cut
+
+sub run_test
+{
+    my $msg = shift;
+    my $fibonacci = shift;
+
+    print "\nTest $msg ...\n";
 
     my @umm = qw(th st nd rd);
     my ($nn, $mm) = (1, 0);
@@ -98,7 +130,7 @@ sub test_fibonacci : Tests(10)
     {
         my $cardinal = ($ii < 4) ? $ii : 0;
 
-        is fibonacci($ii), $nn, "$ii$umm[$cardinal] Fibonacci number";
+        is $fibonacci->($ii), $nn, "$ii$umm[$cardinal] Fibonacci number";
 
         ($nn, $mm) = ($nn+$mm, $nn);
     }

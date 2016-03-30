@@ -9,28 +9,28 @@ use English '-no_match_vars';
 
 =head1 NAME
 
-fibonacci - an example of dumb recursive programming
+fib_linear - an example of recursive programming
 
 =head1 SYNOPSIS
 
-./fibonacci [ nn ]
+./fib_linear [ nn ]
 
 =head1 DESCRIPTION
 
 Provides a script/function to calculate terms of the Fibonacci series.
 
-This is a simple, elegant but deceptive example of the power of recursion.
-During the calculation of F(n), F(1) is calculated not once, but F(n) times.
+This example of the power of recursion has linear time complexity.
+During the calculation of F(n), F(n-1), ... F(0) are each calculated only once.
 
-At a guess, the time complexity is exponential or O(c**n) where c is 1.6180... (otherwise known as the golden ratio).
+This is not an example of tail recursion but it was inspired by the idea.
 
 =head1 EXAMPLES
 
-    $ ./fibonacci.pm
+    $ ./fib_linear.pm
 
 will print the first few terms of the series: 1 1 2 3 5 8 13 21 34 55 89 144
 
-    $ ./fibonacci.pm 16
+    $ ./fib_linear.pm 16
 
 will print the 16th term:  987
 
@@ -43,7 +43,33 @@ will print the 16th term:  987
 
 =head1 ROUTINES
 
-=head2 fibonacci(nth)
+=head2 internal_linear(nth)
+
+    Internal calculation of the nth term of the Fibonacci series
+
+    Parameters - nth (integer) - the term to calculate
+
+    Return - (integer, integer) - the nth and nth-1 terms
+=cut
+
+sub internal_linear
+{
+    my $nth = shift;
+    my @acc;
+
+    if ($nth == 1)
+    {
+        @acc = (0, 1);
+    }
+    else
+    {
+        @acc = internal_linear($nth - 1);
+    }
+
+    return ($acc[0]+$acc[1], $acc[0]);
+}
+
+=head2 linear(nth)
 
     Calculate the nth term of the Fibonacci series
 
@@ -52,26 +78,26 @@ will print the 16th term:  987
     Return - (integer) - the nth term
 =cut
 
-sub fibonacci
+sub linear
 {
     my $nth = shift;
 
-    return $nth if $nth < 2;
+    return $nth if $nth < 1;
 
-    return fibonacci($nth - 1) + fibonacci($nth - 2);
+    return (internal_linear $nth)[0];
 }
 
 # ------------------------------
 
 my $name = $English::PROGRAM_NAME;
 
-if ($name =~ m{/fibonacci.pm})
+if ($name =~ m{/fib_linear.pm})
 {
     if (scalar @ARGV)
     {
         # Print the nth Fibonacci number calculated using recursion
 
-        printf "%d\n", fibonacci $ARGV[0];
+        printf "%d\n", linear $ARGV[0];
     }
     else
     {
