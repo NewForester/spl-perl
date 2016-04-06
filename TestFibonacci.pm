@@ -18,9 +18,10 @@ the first 10 terms of the Fibonacci series.
 
 By induction, the function works for all other positive integers.
 
-The test is run for two implementations of fibonacci():
+The test is run for three implementations of fibonacci():
  - exponential complexity (dumb implementation)
  - linear complexity (inspired by functional programming)
+ - log(n) complexity (as seen on Wikipedia)
 
 =head1 EXAMPLES
 
@@ -56,6 +57,7 @@ use base 'Test::Class';
 
 use fib_exponential;
 use fib_linear;
+use fib_logn;
 
 =head2 make_fixture
 
@@ -105,6 +107,18 @@ sub test_exponential_fibonacci : Tests(10)
 sub test_linear_fibonacci : Tests(10)
 {
     run_test ('linear fibonacci algorithm', \&Fibonacci::linear);
+
+    return;
+}
+
+=head2 test_logn_fibonacci
+
+    The test case for fibonacci() in fib_logn.pm.
+=cut
+
+sub test_logn_fibonacci : Tests(10)
+{
+    run_test ('logn fibonacci algorithm', \&Fibonacci::logn);
 
     return;
 }

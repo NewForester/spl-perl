@@ -39,6 +39,7 @@ Module          | Contents
 hello           | a simple routine inspired by the K&R Hello World program
 fib_exponential | a recursive Fibonacci function with exponential time complexity
 fib_linear      | a recursive Fibonacci function with linear time complexity
+fib_logn        | a recursive Fibonacci function with log(n) time complexity
 
 ---
 
